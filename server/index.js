@@ -14,10 +14,19 @@ const app = express();
 
 
 const corsOptions = {
-    origin: '*', // Temporarily allow all origins
-    credentials: true,
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://antonhatodo.netlify.app',
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Block the request
+    }
+  },
+  credentials: true, // Allow credentials (e.g., cookies) to be sent
 };
-
 
 app.use(cors(corsOptions));
 const store = MongoStore.create({
