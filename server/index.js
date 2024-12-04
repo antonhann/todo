@@ -110,7 +110,7 @@ app.post('/login', async (req, res) => {
             req.session.user = { username: user.username, id: user._id };
             res.status(200).json({ 
                 message: 'Login successful', 
-                user: { username: user.username, id: user._id },
+                user: { username: user.username, id: user._id, session: req.session.user },
             });
         } else {
             res.status(401).json({ message: 'Invalid username or password', user: null });
@@ -120,7 +120,6 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Server error', user: null });
     }
 });
-
 // Route to check if the user is authenticated
 app.get('/auth-status', (req, res) => {
     if (req.session.user) {
@@ -140,7 +139,6 @@ app.post('/logout', (req, res) => {
     });
 });
 
-// CREATE - Create a new todo
 // CREATE - Create a new todo
 app.post('/todos', isAuthenticated, async (req, res) => {
     const { task } = req.body;
@@ -181,7 +179,7 @@ app.get('/todos', isAuthenticated, async (req, res) => {
 
         res.status(200).json(todos);
     } catch (err) {
-        console.error(err);
+        console.error(err, req.session.user );
         res.status(500).send('Error fetching todos');
     }
 });
