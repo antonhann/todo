@@ -142,7 +142,8 @@ app.post('/logout', (req, res) => {
 
 // CREATE - Create a new todo
 app.post('/todos', isAuthenticated, async (req, res) => {
-    const { task } = req.body;
+    const { task, user } = req.body;
+    req.user = user
     try {
         const todo = new Todo({
             username: req.user.username, // Now correctly set
@@ -171,6 +172,8 @@ app.post('/todos', isAuthenticated, async (req, res) => {
 
 // READ - Get all todos
 app.get('/todos', isAuthenticated, async (req, res) => {
+    const { user } = req.body;
+    req.user = user
     try {
         // Access the username from the current session
         const username = req.user.username;
@@ -188,8 +191,8 @@ app.get('/todos', isAuthenticated, async (req, res) => {
 // UPDATE - Update a todo (mark as completed or edit task)
 app.put('/todos/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
-    const { task, completed } = req.body;
-
+    const { task, completed, user } = req.body;
+    req.user = user
     try {
         const updatedTodo = await Todo.findByIdAndUpdate(id, { task, completed }, { new: true });
         if (!updatedTodo) {
@@ -204,7 +207,8 @@ app.put('/todos/:id', isAuthenticated, async (req, res) => {
 // DELETE - Delete a todo
 app.delete('/todos/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
-
+    const { user } = req.body;
+    req.user = user
     try {
         const deletedTodo = await Todo.findByIdAndDelete(id);
         if (!deletedTodo) {
