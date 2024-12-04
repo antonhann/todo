@@ -62,10 +62,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Middleware for authentication
 const isAuthenticated = (req, res, next) => {
-    if (!req.session.user) {
-        return res.status(401).send('Please log in first.');
-    }
-    req.user = req.session.user; // Explicitly set req.user from session
+    // if (!req.session.user) {
+    //     return res.status(401).send('Please log in first.');
+    // }
+    // req.user = req.session.user; // Explicitly set req.user from session
     next();
 };
 
@@ -143,10 +143,9 @@ app.post('/logout', (req, res) => {
 // CREATE - Create a new todo
 app.post('/todos', isAuthenticated, async (req, res) => {
     const { task, user } = req.body;
-    req.user = user
     try {
         const todo = new Todo({
-            username: req.user.username, // Now correctly set
+            username: user.username, // Now correctly set
             task,
             completed: false
         });
@@ -173,10 +172,9 @@ app.post('/todos', isAuthenticated, async (req, res) => {
 // READ - Get all todos
 app.get('/todos', isAuthenticated, async (req, res) => {
     const { user } = req.body;
-    req.user = user
     try {
         // Access the username from the current session
-        const username = req.user.username;
+        const username = user.username;
 
         // Fetch todos for the current user
         const todos = await Todo.find({ username });
@@ -191,8 +189,7 @@ app.get('/todos', isAuthenticated, async (req, res) => {
 // UPDATE - Update a todo (mark as completed or edit task)
 app.put('/todos/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
-    const { task, completed, user } = req.body;
-    req.user = user
+    const { task, completed} = req.body;
     try {
         const updatedTodo = await Todo.findByIdAndUpdate(id, { task, completed }, { new: true });
         if (!updatedTodo) {
@@ -207,8 +204,6 @@ app.put('/todos/:id', isAuthenticated, async (req, res) => {
 // DELETE - Delete a todo
 app.delete('/todos/:id', isAuthenticated, async (req, res) => {
     const { id } = req.params;
-    const { user } = req.body;
-    req.user = user
     try {
         const deletedTodo = await Todo.findByIdAndDelete(id);
         if (!deletedTodo) {
