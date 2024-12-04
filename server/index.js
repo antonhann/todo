@@ -78,13 +78,16 @@ app.post('/login', async (req, res) => {
         if (isMatch) {
         // Store user info in session
         req.session.user = { username: user.username, id: user._id };
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({ 
+            message: 'Login successful', 
+            user:  { username: user.username, id: user._id },
+        });
         } else {
-        res.status(401).json({ message: 'Invalid username or password' });
+        res.status(401).json({ message: 'Invalid username or password', user: null });
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', user: null });
     }
 });
 const isAuthenticated = (req, res, next) => {
