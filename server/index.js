@@ -10,7 +10,6 @@ require('dotenv').config();
 const app = express();
 
 // Allow requests from your frontend's origin
-const cors = require('cors');
 
 const corsOptions = {
   origin: (origin, callback) => {
