@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const User = require('./models/User');  // Import the User model
@@ -10,6 +11,7 @@ require('dotenv').config();
 const app = express();
 
 // Allow requests from your frontend's origin
+
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -29,15 +31,21 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
-app.use(session({
-    secret: 'your-secret-key', // Your secret key
+app.use(
+  session({
+    secret: 'your_secret_key',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI, // Ensure this is set correctly
+    }),
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Ensure this is set to true in production with HTTPS
-        maxAge: 3600000, // Cookie expiration (1 hour)
-    }
-}));
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'strict',
+    },
+  })
+);
 
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
