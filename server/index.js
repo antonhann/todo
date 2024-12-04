@@ -170,7 +170,7 @@ app.post('/todos', isAuthenticated, async (req, res) => {
 
 
 // READ - Get all todos
-app.get('/todos', isAuthenticated, async (req, res) => {
+app.post('/todos/all', isAuthenticated, async (req, res) => {
     const { user } = req.body;
     try {
         // Access the username from the current session

@@ -23,15 +23,18 @@ const Todo: React.FC = () => {
     }
   }, [user]);
   const getTodos = () => {
-    fetch(API_URL, {
-        method: 'GET',
+    fetch(API_URL + "/all", {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ user: user }),
         credentials: 'include', // Send cookies with the request
       })
-        .then((response) => response.json())
+        .then((response) => {
+            console.log(response)
+            return response.json()
+        })
         .then((data) => {
             const sortedTodos = data.sort((a: { completed: boolean }, b: { completed: boolean }) => {
                 return a.completed === b.completed ? 0 : a.completed ? 1 : -1;
