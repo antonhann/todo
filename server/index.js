@@ -15,11 +15,6 @@ app.use(session({
     saveUninitialized: true,    // Save new session even if it's empty
     cookie: { secure: false }   // Set 'secure: true' in production with HTTPS
 }));
-const dummyUser = {
-    username: 'testUser',
-    password: 'testPassword', // In production, store hashed passwords
-};
-
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('MongoDB Connected...');
@@ -27,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
-
+console.log (process.env.MONGODB_URI)
 
 app.get('/', (req, res) => {
   res.send('Server is running!');
