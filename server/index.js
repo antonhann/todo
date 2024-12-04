@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGODB_URI)
 console.log (process.env.MONGODB_URI)
 
 app.get('/', (req, res) => {
-  res.send('Server is running!');
+  res.send(process.env.MONGODB_URI);
 });
 //Route to register
 app.post('/register', async (req, res) => {
