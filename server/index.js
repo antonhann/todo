@@ -14,31 +14,23 @@ const app = express();
 
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'https://antonhatodo.netlify.app',
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow the request
-    } else {
-      callback(new Error('Not allowed by CORS')); // Block the request
-    }
-  },
-  credentials: true, // Allow credentials (e.g., cookies) to be sent
+    origin: '*', // Temporarily allow all origins
+    credentials: true,
 };
 
-app.use(cors(corsOptions));
 
+app.use(cors(corsOptions));
+const store = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+});
+console.log('Session store initialized');
 app.use(express.json());
 app.use(
   session({
     secret: 'your_secret_key',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI, // Ensure this is set correctly
-    }),
+    store: store,
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
