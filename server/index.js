@@ -15,12 +15,16 @@ app.use(session({
     saveUninitialized: true,    // Save new session even if it's empty
     cookie: { secure: false }   // Set 'secure: true' in production with HTTPS
 }));
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('MongoDB Connected...');
-  })
-  .catch(err => {
-    console.error('MongoDB connection error:', err);
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000 // Increase timeout
+})
+.then(() => {
+    console.log("MongoDB Connected!");
+})
+.catch((err) => {
+    console.error("MongoDB connection error:", err.message);
 });
 
 app.get('/', (req, res) => {
