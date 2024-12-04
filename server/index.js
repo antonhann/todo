@@ -10,12 +10,25 @@ require('dotenv').config();
 const app = express();
 
 // Allow requests from your frontend's origin
+const cors = require('cors');
+
 const corsOptions = {
-    origin: "https://antonhatodo.netlify.app/", // Replace with your frontend's URL
-    credentials: true,               // Allow cookies to be sent with requests
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://antonhatodo.netlify.app',
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Block the request
+    }
+  },
+  credentials: true, // Allow credentials (e.g., cookies) to be sent
 };
 
 app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(session({
     secret: 'your-secret-key', // Your secret key
