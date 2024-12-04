@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 export const BACKEND_URL = "https://todo-server-rcl4.onrender.com";
 
@@ -21,10 +21,6 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
   const login = async (username: string, password: string) => {
     try {
       const response = await fetch(`${BACKEND_URL}/login`, {
@@ -32,7 +28,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, user}),
         credentials: "include", // Send cookies
       });
 
@@ -74,7 +70,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, user }),
       });
 
       if (!response.ok) {
@@ -90,25 +86,25 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  const checkAuthStatus = async () => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/auth-status`, {
-        method: "GET",
-        credentials: "include",
-      });
+//   const checkAuthStatus = async () => {
+//     try {
+//       const response = await fetch(`${BACKEND_URL}/auth-status`, {
+//         method: "GET",
+//         credentials: "include",
+//       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-    } catch (error) {
-      console.error("Auth status check error:", error);
-    }
-  };
+//       if (response.ok) {
+//         const data = await response.json();
+//         setUser(data.user);
+//         setIsAuthenticated(true);
+//       } else {
+//         setUser(null);
+//         setIsAuthenticated(false);
+//       }
+//     } catch (error) {
+//       console.error("Auth status check error:", error);
+//     }
+//   };
 
   return (
     <SessionContext.Provider value={{ user, isAuthenticated, login, logout, register }}>

@@ -28,6 +28,7 @@ const Todo: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ user: user }),
         credentials: 'include', // Send cookies with the request
       })
         .then((response) => response.json())
@@ -43,7 +44,7 @@ const Todo: React.FC = () => {
   const handleAddTodo = async () => {
     if (!newTask.trim()) return;
   
-    const newTodo = { task: newTask, completed: false, username: user?.username || '' };
+    const newTodo = { task: newTask, completed: false, username: user?.username || '', user: user };
     
     try {
       const response = await fetch(API_URL, {
@@ -99,7 +100,7 @@ const Todo: React.FC = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ task: task, completed: completed }),
+            body: JSON.stringify({ task: task, completed: completed, user: user }),
             credentials: 'include',
         });
 
@@ -128,6 +129,7 @@ const Todo: React.FC = () => {
       const response = await fetch(`${API_URL}/${id}`, {
         method: 'DELETE',
         credentials: 'include',
+        body: JSON.stringify({user: user})
       });
 
       if (!response.ok) {
