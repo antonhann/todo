@@ -15,6 +15,7 @@
   --text-primary: var(--white);
   --text-secondary: #d0e1f9; /* light blue for softer text */
   --text-accent: var(--color-accent-light-blue);
+  background: var(--dark-blue);
 }
 body {
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -24,8 +25,13 @@ body {
 }
 .app-container {
   display: flex;
-  min-height: 100vh; /* Minimum height to ensure the entire viewport is covered */
+  flex-direction: column;
+  min-height: 98vh; /* Minimum height to ensure the entire viewport is covered */
 }
+footer{
+  color: var(--text-primary)!important;
+  background: var(--dark-blue);
+} 
 .top-nav {
   position: fixed;
   top: 0;
