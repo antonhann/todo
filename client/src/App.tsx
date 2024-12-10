@@ -11,6 +11,7 @@ import RegisterPage from './components/Pages/Register'
 import Home from './components/Pages/Home'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Layout } from './components/reuseables/Layout'
+import Backend from './components/Pages/Backend'
 
 const ROUTES: RouteConfig[] = [
   {
@@ -24,6 +25,10 @@ const ROUTES: RouteConfig[] = [
   {
     path: "/register",
     component: RegisterPage
+  },
+  {
+    path: "/backend",
+    component: Backend
   }
 ]
 const App = () => {

@@ -117,3 +117,21 @@ h1{
 .red{
   background-color: red;
 }
+.backend-link{
+  text-decoration: underline!important;
+}
+footer{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--dark-blue);
+  border-top: 1px solid white;
+  padding-top: 10px
+}
+.backend{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  border-top: 1px solid white;
+}
